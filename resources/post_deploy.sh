@@ -19,11 +19,20 @@ databricks permissions update database-projects "$PROJECT_UID" \
 
 echo "Protecting production branch..."
 
-databricks postgres update-branch \
-  "projects/$PROJECT_ID/branches/production" \
-  spec.is_protected \
-  --json '{
-    "spec": {
-      "is_protected": true
-    }
-  }'
+IS_PROTECTED=$(
+  databricks postgres get-branch "projects/$PROJECT_ID/branches/production" -o json \
+    | jq -r '.status.is_protected'
+)
+
+if [ "$IS_PROTECTED" = "true" ]; then
+  echo "Already protected, skipping."
+else
+  databricks postgres update-branch \
+    "projects/$PROJECT_ID/branches/production" \
+    spec.is_protected \
+    --json '{
+      "spec": {
+        "is_protected": true
+      }
+    }'
+fi
