@@ -9,7 +9,7 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-      PROJECT_ID: ${{ secrets.LAKEBASE_INSTANCE_NAME }}
+      PROJECT_ID: ${{ vars.LAKEBASE_INSTANCE_NAME }}
 
     steps:
       - name: Install Databricks CLI

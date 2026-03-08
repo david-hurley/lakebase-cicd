@@ -20,9 +20,9 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Deploy Lakebase project
-        run: databricks bundle deploy --var="project_id=${{ secrets.LAKEBASE_INSTANCE_NAME }}"
+        run: databricks bundle deploy --var="project_id=${{ vars.LAKEBASE_INSTANCE_NAME }}"
 
       - name: Run post-deploy
         run: bash resources/post_deploy.sh
         env:
-          PROJECT_ID: ${{ secrets.LAKEBASE_INSTANCE_NAME }}
+          PROJECT_ID: ${{ vars.LAKEBASE_INSTANCE_NAME }}
