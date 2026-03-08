@@ -1,5 +1,5 @@
 bundle:
-  name: david-lakebase-cicd
+  name: david-lakebase-cicd-testing
 
 variables:
   project_id:
