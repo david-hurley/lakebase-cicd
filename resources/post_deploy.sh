@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-PROJECT_ID="david-lakebase-cicd"
-BRANCH_ID="production"
-
 echo "Assigning Lakebase instance permissions..."
 
 PROJECT_UID=$(
@@ -23,7 +20,7 @@ databricks permissions update database-projects "$PROJECT_UID" \
 echo "Protecting production branch..."
 
 databricks postgres update-branch \
-  "projects/$PROJECT_ID/branches/$BRANCH_ID" \
+  "projects/$PROJECT_ID/branches/production" \
   spec.is_protected \
   --json '{
     "spec": {

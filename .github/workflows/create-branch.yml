@@ -6,21 +6,42 @@ on:
 jobs:
   create-branch:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      PROJECT_ID: ${{ secrets.LAKEBASE_INSTANCE_NAME }}
 
+    steps:
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
 
       - name: Format branch name
-        id: sanitize
+        id: branch
         run: |
           SANITIZED=$(echo "${{ github.event.ref }}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-63)
-          echo "branch_name=$SANITIZED" >> "$GITHUB_OUTPUT"
+          echo "name=$SANITIZED" >> "$GITHUB_OUTPUT"
 
       - name: Create Lakebase branch
-        run: databricks bundle deploy -t development --var="branch_name=${{ steps.sanitize.outputs.branch_name }}"
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks postgres create-branch \
+            "projects/$PROJECT_ID" \
+            "${{ steps.branch.outputs.name }}" \
+            --json '{
+              "spec": {
+                "source_branch": "projects/'"$PROJECT_ID"'/branches/production",
+                "ttl": "604800s"
+              }
+            }'
+
+      - name: Create read-write endpoint
+        run: |
+          databricks postgres create-endpoint \
+            "projects/$PROJECT_ID/branches/${{ steps.branch.outputs.name }}" \
+            primary \
+            --json '{
+              "spec": {
+                "endpoint_type": "ENDPOINT_TYPE_READ_WRITE",
+                "autoscaling_limit_min_cu": 0.5,
+                "autoscaling_limit_max_cu": 2.0
+              }
+            }'

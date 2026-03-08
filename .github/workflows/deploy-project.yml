@@ -8,6 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,13 +20,9 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Deploy Lakebase project
-        run: databricks bundle deploy -t production
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: databricks bundle deploy --var="project_id=${{ secrets.LAKEBASE_INSTANCE_NAME }}"
 
       - name: Run post-deploy
         run: bash resources/post_deploy.sh
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          PROJECT_ID: ${{ secrets.LAKEBASE_INSTANCE_NAME }}
