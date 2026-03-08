@@ -1,5 +1,5 @@
 bundle:
-  name: david-lakebase-cicd-demo-new
+  name: david-demo
 
 variables:
   project_name:
