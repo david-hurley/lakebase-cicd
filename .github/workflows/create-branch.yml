@@ -13,8 +13,14 @@ jobs:
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
 
+      - name: Format branch name
+        id: sanitize
+        run: |
+          SANITIZED=$(echo "${{ github.event.ref }}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-63)
+          echo "branch_name=$SANITIZED" >> "$GITHUB_OUTPUT"
+
       - name: Create Lakebase branch
-        run: databricks bundle deploy -t development --var="branch_name=${{ github.event.ref }}"
+        run: databricks bundle deploy -t development --var="branch_name=${{ steps.sanitize.outputs.branch_name }}"
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}

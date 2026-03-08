@@ -1,19 +1,9 @@
 bundle:
   name: david-lakebase-cicd
 
+include:
+  - resources/*.yml
+
 variables:
   branch_name:
     description: "Lakebase branch name, set to the git branch name"
-    default: "dev"
-
-targets:
-  production:
-    include:
-      - resources/lakebase.yml
-    scripts:
-      post_deploy:
-        content: bash resources/post_deploy.sh
-
-  development:
-    include:
-      - resources/branch.yml

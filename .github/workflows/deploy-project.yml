@@ -1,4 +1,4 @@
-name: Deploy Lakebase Project
+name: Deploy Lakebase Autoscaling Project
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
       - name: Run post-deploy
-        run: databricks bundle run post_deploy -t production
+        run: bash resources/post_deploy.sh
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
