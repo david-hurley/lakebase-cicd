@@ -1,5 +1,5 @@
 bundle:
-  name: david-lakebase-cicd-testing
+  name: david-lakebase-cicd-demo-new
 
 variables:
   project_id:
@@ -19,7 +19,7 @@ resources:
 
   postgres_endpoints:
     production_read_replica:
-      parent: projects/${var.project_id}/branches/production
+      parent: ${resources.postgres_projects.lakebase.id}/branches/production
       endpoint_id: read-replica
       endpoint_type: ENDPOINT_TYPE_READ_ONLY
       autoscaling_limit_min_cu: 0.5
