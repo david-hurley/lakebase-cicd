@@ -1,0 +1,35 @@
+resources:
+  postgres_projects:
+    lakebase:
+      project_id: david-lakebase-iac
+      display_name: 'David Lakebase IaC'
+      pg_version: 17
+      history_retention_duration: "1209600s"
+      default_endpoint_settings:
+        autoscaling_limit_min_cu: 0.5
+        autoscaling_limit_max_cu: 2
+        no_suspension: true
+
+  postgres_branches:
+    dev:
+      parent: ${resources.postgres_projects.lakebase.id}
+      branch_id: dev
+      source_branch: ${resources.postgres_projects.lakebase.id}/branches/production
+      ttl: "604800s"
+
+  postgres_endpoints:
+    production_read_replica:
+      parent: ${resources.postgres_projects.lakebase.id}/branches/production
+      endpoint_id: read-replica
+      endpoint_type: ENDPOINT_TYPE_READ_ONLY
+      autoscaling_limit_min_cu: 0.5
+      autoscaling_limit_max_cu: 2
+      suspend_timeout_duration: "300s"
+
+    dev_primary:
+      parent: ${resources.postgres_branches.dev.id}
+      endpoint_id: primary
+      endpoint_type: ENDPOINT_TYPE_READ_WRITE
+      autoscaling_limit_min_cu: 0.5
+      autoscaling_limit_max_cu: 2
+      suspend_timeout_duration: "300s"
