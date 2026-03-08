@@ -23,7 +23,7 @@ jobs:
       - name: Deploy Lakebase project
         run: databricks bundle deploy --var="project_name=${{ env.PROJECT_NAME }}"
 
-  post-deploy:
+  configure-lakebase-autoscaling-instance:
     needs: deploy-lakebase-autoscaling-instance
     runs-on: ubuntu-latest
     env:
