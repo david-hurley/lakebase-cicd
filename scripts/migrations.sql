@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS app.users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-
 SELECT databricks_create_role('lakebase-developers', 'GROUP');
 GRANT USAGE ON SCHEMA app TO "lakebase-developers";
 GRANT SELECT ON ALL TABLES IN SCHEMA app TO "lakebase-developers";
