@@ -5,10 +5,6 @@ variables:
   project_name:
     description: "Lakebase project name"
 
-scripts:
-  post_deploy:
-    content: PROJECT_NAME=${var.project_name} bash resources/post_deploy.sh
-
 resources:
   postgres_projects:
     lakebase:
