@@ -2,7 +2,7 @@ bundle:
   name: david-lakebase-cicd
 
 include:
-  - resources/*.yml
+  - targets/*.yml
 
 variables:
   branch_name:

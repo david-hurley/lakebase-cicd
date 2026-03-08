@@ -1,7 +1,4 @@
 targets:
-  development:
-    default: true
-
   production:
     resources:
       postgres_projects:

@@ -1,0 +1,19 @@
+targets:
+  development:
+    default: true
+    resources:
+      postgres_branches:
+        feature:
+          parent: projects/david-lakebase-cicd
+          branch_id: ${var.branch_name}
+          source_branch: projects/david-lakebase-cicd/branches/production
+          ttl: "604800s"
+
+      postgres_endpoints:
+        feature_primary:
+          parent: ${resources.postgres_branches.feature.id}
+          endpoint_id: primary
+          endpoint_type: ENDPOINT_TYPE_READ_WRITE
+          autoscaling_limit_min_cu: 0.5
+          autoscaling_limit_max_cu: 2
+          suspend_timeout_duration: "300s"
