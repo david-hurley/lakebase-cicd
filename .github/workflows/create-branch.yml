@@ -4,7 +4,7 @@ on:
   create:
 
 jobs:
-  create-branch:
+  create-lakebase-autoscaling-branch:
     runs-on: ubuntu-latest
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}

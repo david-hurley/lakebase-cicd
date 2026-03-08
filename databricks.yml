@@ -7,7 +7,7 @@ variables:
 
 scripts:
   post_deploy:
-    content: bash resources/post_deploy.sh
+    content: PROJECT_NAME=${var.project_name} bash resources/post_deploy.sh
 
 resources:
   postgres_projects:
