@@ -11,6 +11,7 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      PROJECT_NAME: ${{ vars.LAKEBASE_PROJECT_NAME }}
 
     steps:
       - name: Checkout code
@@ -20,9 +21,7 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Deploy Lakebase project
-        run: databricks bundle deploy --var="project_id=${{ vars.LAKEBASE_INSTANCE_NAME }}"
+        run: databricks bundle deploy --var="project_name=${{ env.PROJECT_NAME }}"
 
       - name: Run post-deploy
-        run: bash resources/post_deploy.sh
-        env:
-          PROJECT_ID: ${{ vars.LAKEBASE_INSTANCE_NAME }}
+        run: databricks bundle run post_deploy --var="project_name=${{ env.PROJECT_NAME }}"

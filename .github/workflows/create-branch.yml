@@ -1,4 +1,4 @@
-name: Create Lakebase Branch
+name: Create Lakebase Autoscaling Branch
 
 on:
   create:
@@ -9,7 +9,7 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-      PROJECT_ID: ${{ vars.LAKEBASE_INSTANCE_NAME }}
+      PROJECT_NAME: ${{ vars.LAKEBASE_PROJECT_NAME }}
 
     steps:
       - name: Install Databricks CLI
@@ -24,11 +24,11 @@ jobs:
       - name: Create Lakebase branch
         run: |
           databricks postgres create-branch \
-            "projects/$PROJECT_ID" \
+            "projects/$PROJECT_NAME" \
             "${{ steps.branch.outputs.name }}" \
             --json '{
               "spec": {
-                "source_branch": "projects/'"$PROJECT_ID"'/branches/production",
+                "source_branch": "projects/'"$PROJECT_NAME"'/branches/production",
                 "ttl": "604800s"
               }
             }'
@@ -36,7 +36,7 @@ jobs:
       - name: Create read-write endpoint
         run: |
           databricks postgres create-endpoint \
-            "projects/$PROJECT_ID/branches/${{ steps.branch.outputs.name }}" \
+            "projects/$PROJECT_NAME/branches/${{ steps.branch.outputs.name }}" \
             primary \
             --json '{
               "spec": {
