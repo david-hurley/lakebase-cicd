@@ -1,0 +1,27 @@
+name: Delete Lakebase Branch
+
+on:
+  delete:
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      PROJECT_ID: ${{ secrets.LAKEBASE_INSTANCE_NAME }}
+
+    steps:
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Format branch name
+        id: branch
+        run: |
+          SANITIZED=$(echo "${{ github.event.ref }}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-63)
+          echo "name=$SANITIZED" >> "$GITHUB_OUTPUT"
+
+      - name: Delete Lakebase branch
+        run: |
+          databricks postgres delete-branch \
+            "projects/$PROJECT_ID/branches/${{ steps.branch.outputs.name }}"
