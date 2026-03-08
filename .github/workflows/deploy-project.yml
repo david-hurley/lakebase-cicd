@@ -38,5 +38,8 @@ jobs:
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
 
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
       - name: Run post-deploy
-        run: bash resources/post_deploy.sh "${{ env.PROJECT_NAME }}"
+        run: bash scripts/post_deploy.sh "${{ env.PROJECT_NAME }}"
