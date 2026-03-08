@@ -3,3 +3,7 @@ bundle:
 
 include:
   - resources/*.yml
+
+scripts:
+  post_deploy:
+    content: bash resources/post_deploy.sh
