@@ -1,9 +1,5 @@
 bundle:
-  name: david-lakebase-iac
+  name: david-lakebase-cicd
 
 include:
   - resources/*.yml
-
-scripts:
-  post_deploy:
-    content: bash scripts/post_deploy.sh

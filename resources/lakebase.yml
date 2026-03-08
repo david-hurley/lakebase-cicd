@@ -1,8 +1,8 @@
 resources:
   postgres_projects:
     lakebase:
-      project_id: david-lakebase-iac
-      display_name: 'David Lakebase IaC'
+      project_id: david-lakebase-cicd
+      display_name: 'David Lakebase CICD'
       pg_version: 17
       history_retention_duration: "1209600s"
       default_endpoint_settings:
