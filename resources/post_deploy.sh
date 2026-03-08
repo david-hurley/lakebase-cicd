@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
+PROJECT_ID="david-lakebase-cicd"
+BRANCH_ID="production"
+
 echo "Assigning Lakebase instance permissions..."
 
-PROJECT_ID=$(
-  databricks postgres get-project "projects/david-lakebase-cicd" -o json \
+PROJECT_UID=$(
+  databricks postgres get-project "projects/$PROJECT_ID" -o json \
     | jq -r '.uid'
 )
 
-databricks permissions update database-projects "$PROJECT_ID" \
+databricks permissions update database-projects "$PROJECT_UID" \
   --json '{
     "access_control_list": [
       {
@@ -15,4 +18,15 @@ databricks permissions update database-projects "$PROJECT_ID" \
         "permission_level": "CAN_USE"
       }
     ]
+  }'
+
+echo "Protecting production branch..."
+
+databricks postgres update-branch \
+  "projects/$PROJECT_ID/branches/$BRANCH_ID" \
+  spec.is_protected \
+  --json '{
+    "spec": {
+      "is_protected": true
+    }
   }'

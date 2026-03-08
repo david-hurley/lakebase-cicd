@@ -1,0 +1,20 @@
+name: Create Lakebase Branch
+
+on:
+  create:
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Create Lakebase branch
+        run: databricks bundle deploy -t development --var="branch_name=${{ github.event.ref }}"
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
