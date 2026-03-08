@@ -23,5 +23,20 @@ jobs:
       - name: Deploy Lakebase project
         run: databricks bundle deploy --var="project_name=${{ env.PROJECT_NAME }}"
 
+  post-deploy:
+    needs: deploy-lakebase-autoscaling-instance
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      PROJECT_NAME: ${{ vars.LAKEBASE_PROJECT_NAME }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
       - name: Run post-deploy
         run: bash resources/post_deploy.sh "${{ env.PROJECT_NAME }}"
