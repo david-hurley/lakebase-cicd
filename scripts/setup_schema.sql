@@ -6,14 +6,9 @@ CREATE TABLE IF NOT EXISTS app.users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
-    phone_number TEXT UNIQUE NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS app.settings (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    color TEXT NOT NULL
-);
 
 SELECT databricks_create_role('lakebase-developers', 'GROUP');
 GRANT USAGE ON SCHEMA app TO "lakebase-developers";
