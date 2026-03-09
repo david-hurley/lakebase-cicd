@@ -73,4 +73,4 @@ PGPASSWORD=$DB_TOKEN psql "$CONN dbname=postgres" \
 echo "Running schema setup..."
 
 PGPASSWORD=$DB_TOKEN psql "$CONN dbname=customer_service_app" \
-  -f scripts/setup_schema.sql
+  -f scripts/migrations.sql
