@@ -1,5 +1,5 @@
 bundle:
-  name: lakebase-demo
+  name: lakebase-demo-cicd
 
 variables:
   project_name:
