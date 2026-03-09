@@ -1,5 +1,5 @@
 bundle:
-  name: lakebase-demo-cicd
+  name: lakebase-autoscaling-demo
 
 variables:
   project_name:
