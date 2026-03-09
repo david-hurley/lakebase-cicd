@@ -15,6 +15,11 @@ CREATE TABLE IF NOT EXISTS app.settings (
     color TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS app.locations (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    city TEXT NOT NULL
+);
+
 SELECT databricks_create_role('lakebase-developers', 'GROUP');
 GRANT USAGE ON SCHEMA app TO "lakebase-developers";
 GRANT SELECT ON ALL TABLES IN SCHEMA app TO "lakebase-developers";
