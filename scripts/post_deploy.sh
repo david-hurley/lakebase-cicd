@@ -46,8 +46,8 @@ fi
 echo "Running database setup..."
 
 HOST=$(
-  databricks postgres list-endpoints "projects/$PROJECT_NAME/branches/production" -o json \
-    | jq -r '.[0].status.hosts.host'
+  databricks postgres get-endpoint "projects/$PROJECT_NAME/branches/production/endpoints/primary" -o json \
+    | jq -r '.status.hosts.host'
 )
 
 DB_TOKEN=$(
