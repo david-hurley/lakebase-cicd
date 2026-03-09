@@ -1,3 +1,14 @@
+# ---------------------------------------------------------------------------
+# Databricks Asset Bundle — Lakebase Autoscaling CI/CD Demo
+#
+# This bundle provisions a Lakebase (managed Postgres) project and a
+# read-only replica endpoint.  It is deployed by the GitHub Actions
+# workflow in .github/workflows/deploy-configure-lakebase.yml.
+#
+# Required variable:
+#   project_name — passed at deploy-time via `--var="project_name=..."`
+# ---------------------------------------------------------------------------
+
 bundle:
   name: lakebase-autoscaling-demo
 
@@ -6,17 +17,19 @@ variables:
     description: "Lakebase project name"
 
 resources:
+  # Lakebase project — the top-level container for branches & endpoints.
   postgres_projects:
     lakebase:
       project_id: ${var.project_name}
       display_name: ${var.project_name}
       pg_version: 17
-      history_retention_duration: "1209600s"
+      history_retention_duration: "1209600s"            # 14 days
       default_endpoint_settings:
         autoscaling_limit_min_cu: 0.5
         autoscaling_limit_max_cu: 2
-        no_suspension: true
+        no_suspension: true                             # keep production always-on
 
+  # Read-only replica on the production branch (scales to zero after 5 min).
   postgres_endpoints:
     production_read_replica:
       parent: ${resources.postgres_projects.lakebase.id}/branches/production
@@ -24,4 +37,4 @@ resources:
       endpoint_type: ENDPOINT_TYPE_READ_ONLY
       autoscaling_limit_min_cu: 0.5
       autoscaling_limit_max_cu: 2
-      suspend_timeout_duration: "300s"
+      suspend_timeout_duration: "300s"                  # scale-to-zero after 5 min

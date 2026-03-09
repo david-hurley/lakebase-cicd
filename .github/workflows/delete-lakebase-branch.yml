@@ -1,3 +1,11 @@
+# ---------------------------------------------------------------------------
+# Delete Lakebase Branch
+#
+# Triggered whenever a Git branch is deleted.  Removes the corresponding
+# Lakebase dev branch (and its endpoints) so resources are cleaned up
+# automatically when a feature branch is merged or abandoned.
+# ---------------------------------------------------------------------------
+
 name: Delete Lakebase Autoscaling Branch
 
 on:

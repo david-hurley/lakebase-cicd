@@ -1,3 +1,17 @@
+# ---------------------------------------------------------------------------
+# Create Lakebase Branch
+#
+# Triggered whenever a new Git branch is created.  Creates a matching
+# Lakebase dev branch (forked from production) with its own read-write
+# endpoint so each feature branch gets an isolated database environment.
+#
+# The branch name is sanitised to satisfy Lakebase naming rules
+# (lowercase alphanumeric + hyphens, max 63 chars).
+#
+# The branch has a 7-day TTL and is automatically deleted if the
+# corresponding Git branch is removed (see delete-lakebase-branch.yml).
+# ---------------------------------------------------------------------------
+
 name: Create Lakebase Autoscaling Branch
 
 on:

@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
+# ---------------------------------------------------------------------------
+# Post-deploy configuration for the Lakebase project.
+#
+# Called by the "configure" job in deploy-configure-lakebase.yml after the
+# bundle has been deployed.  It performs three tasks:
+#   1. Grants workspace-level CAN_USE permission to the "lakebase-developers"
+#      group so team members can connect.
+#   2. Marks the production branch as protected to prevent accidental writes.
+#   3. Creates the application database (if it doesn't exist) and runs
+#      schema migrations via psql.
+#
+# Usage:
+#   bash scripts/post_deploy.sh <project-name>
+# ---------------------------------------------------------------------------
 
 PROJECT_NAME="${1:-$PROJECT_NAME}"
 if [ -z "$PROJECT_NAME" ]; then
   echo "Error: PROJECT_NAME is required. Pass as argument or set as env var."
   exit 1
 fi
+
+# --- 1. Workspace permissions -----------------------------------------------
 
 echo "Assigning Lakebase instance permissions..."
 
@@ -22,6 +38,8 @@ databricks permissions update database-projects "$PROJECT_UID" \
       }
     ]
   }'
+
+# --- 2. Protect production branch -------------------------------------------
 
 echo "Protecting production branch..."
 
@@ -42,6 +60,8 @@ else
       }
     }'
 fi
+
+# --- 3. Database creation & schema migrations --------------------------------
 
 echo "Running database setup..."
 

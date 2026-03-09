@@ -1,3 +1,18 @@
+# ---------------------------------------------------------------------------
+# Deploy & Configure Lakebase Autoscaling Project
+#
+# Triggered on every push to main.  Two sequential jobs:
+#   1. deploy  — runs `databricks bundle deploy` to create / update the
+#                Lakebase project and its production read-replica endpoint.
+#   2. configure — sets permissions, protects the production branch,
+#                  creates the database, and runs schema migrations.
+#
+# Secrets / variables required:
+#   secrets.DATABRICKS_HOST     — workspace URL
+#   secrets.DATABRICKS_TOKEN    — PAT or OAuth token
+#   vars.LAKEBASE_PROJECT_NAME  — project name (e.g. "my-app")
+# ---------------------------------------------------------------------------
+
 name: Deploy Lakebase Autoscaling Project
 
 on:
