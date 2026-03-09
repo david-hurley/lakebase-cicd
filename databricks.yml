@@ -1,5 +1,5 @@
 bundle:
-  name: david-demo
+  name: lakebase-demo
 
 variables:
   project_name:
