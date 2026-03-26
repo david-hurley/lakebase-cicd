@@ -2,7 +2,7 @@
 
 A reference implementation for database-per-branch development workflows using **Databricks Lakebase Autoscaling** (managed Postgres) and **GitHub Actions**.
 
-## How It Works
+## How It Works -
 
 Every feature branch gets its own isolated Lakebase database branch, forked from production with copy-on-write. Merging to `main` deploys schema changes to production. Deleting the Git branch cleans up the Lakebase branch automatically.
 
